@@ -19,3 +19,8 @@ Search regex: ` ^.*\(.* x .*\)`
 - What to do with the `mju_` prefix functions?
 - Change functions taking integers to the correct enum types.
 
+# Building on Mac
+
+1. Download MuJoCo
+2. Copy the dylib into the project: `cp /Volumes/MuJoCo/mujoco.framework/Versions/A/libmujoco.3.8.0.dylib ~/GitHub/sotibot/mujoco/`
+2. Fix the tool name by running this for your directory: `install_name_tool -change @rpath/mujoco.framework/Versions/A/libmujoco.3.8.0.dylib @executable_path/libmujoco.3.8.0.dylib ~/GitHub/sotibot/mujoco/tests/prog.bin`
