@@ -11,6 +11,11 @@
 3. Convert all array pointers to multi-pointers.
 Search regex: ` ^.*\(.* x .*\)`
 
-4. Remove the `mj_` prefix from foreign functions in  `mujoco.odin` and add in the linked library loading. TODO: determine what I want do with the `mju_` prefix functions.
+4. Remove the `mj_` prefix from foreign functions in  `mujoco.odin` and add in the linked library loading.
 
 5. Delete otherwise-empty files.
+
+## TODO:
+- What to do with the `mju_` prefix functions?
+- Change functions taking integers to the correct enum types.
+
