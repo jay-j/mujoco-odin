@@ -1,0 +1,63 @@
+inputs = [
+	"mujoco"
+]
+
+output_folder = "mujoco-odin"
+
+// Remove this prefix from types names (structs, enums, etc)
+remove_type_prefix = "mj"
+
+// Leave the types intact to aid documentation searching
+force_ada_case_types = false
+
+// Also removes the typedef'd
+remove_type_suffix = "_"
+
+// remove_function_prefix = "mjf"
+
+// `package something` to put at top of each generated Odin binding file.
+package_name = "mujoco"
+
+// Additional include paths to send into clang. While generating the bindings clang will look into
+// this path in search for included headers.
+clang_include_paths = [
+	"mujoco",
+	"/media/data/Programs/mujoco/odin-bindings/mujoco_src"
+]
+
+rename = {
+	"mjtNum" = "f64",
+	"mjtSize" = "i64",
+	"mjtByte" = "b8",
+}
+
+//	"mjsElement" = "Element",
+//	"mjsJoint" = "Joint",
+//	"mjsGeom" = "Geom",
+//	"mjsSite" = "Site",
+//	"mjsCamera" = "Camera",
+//	"mjsLight" = "Light",
+//	"mjsFlex" = "Flex",
+//	"mjsMesh" = "Mesh",
+//	"mjsMaterial" = "Material",
+//	"mjsPair" = "Pair",
+//	"mjsEquality" = "Equality",
+//	"mjsTendon" = "Tendon",
+//	"mjsActuator" = "Actuator",
+
+
+remove = [
+    "mjtNum",
+    "mjtSize"
+    "mjtByte"
+]
+
+
+type_overrides = {
+}
+
+
+bit_setify = {
+	"DisableBit"= "Disable_Bit"
+	"mjState_" = "State"
+}
