@@ -447,13 +447,13 @@ foreign mujoco {
 	addContact :: proc(m: ^Model, d: ^Data, con: ^Contact) -> i32 ---
 
 	// Determine type of friction cone.
-	isPyramidal :: proc(m: ^Model) -> i32 ---
+	isPyramidal :: proc(m: ^Model) -> b32 ---
 
 	// Determine type of constraint Jacobian.
-	isSparse :: proc(m: ^Model) -> i32 ---
+	isSparse :: proc(m: ^Model) -> b32 ---
 
 	// Determine type of solver (PGS is dual, CG and Newton are primal).
-	isDual :: proc(m: ^Model) -> i32 ---
+	isDual :: proc(m: ^Model) -> b32 ---
 
 	// Multiply dense or sparse constraint Jacobian by vector.
 	mulJacVec :: proc(m: ^Model, d: ^Data, res: ^f64, vec: ^f64) ---
@@ -496,10 +496,10 @@ foreign mujoco {
 	angmomMat :: proc(m: ^Model, d: ^Data, mat: ^f64, body: i32) ---
 
 	// Get id of object with the specified mjtObj type and name; return -1 if id not found.
-	name2id :: proc(m: ^Model, type: i32, name: cstring) -> i32 ---
+	name2id :: proc(m: ^Model, type: tObj, name: cstring) -> i32 ---
 
 	// Get name of object with the specified mjtObj type and id; return NULL if name not found.
-	id2name :: proc(m: ^Model, type: i32, id: i32) -> cstring ---
+	id2name :: proc(m: ^Model, type: tObj, id: i32) -> cstring ---
 
 	// Convert sparse inertia matrix M into full (i.e. dense) matrix.
 	fullM :: proc(m: ^Model, dst: ^f64, M: ^f64) ---
@@ -520,10 +520,10 @@ foreign mujoco {
 	applyFT :: proc(m: ^Model, d: ^Data, force: ^[3]f64, torque: ^[3]f64, point: ^[3]f64, body: i32, qfrc_target: ^f64) ---
 
 	// Compute object 6D velocity (rot:lin) in object-centered frame, world/local orientation.
-	objectVelocity :: proc(m: ^Model, d: ^Data, objtype: i32, objid: i32, res: ^[6]f64, flg_local: i32) ---
+	objectVelocity :: proc(m: ^Model, d: ^Data, objtype: tObj, objid: i32, res: ^[6]f64, flg_local: i32) ---
 
 	// Compute object 6D acceleration (rot:lin) in object-centered frame, world/local orientation.
-	objectAcceleration :: proc(m: ^Model, d: ^Data, objtype: i32, objid: i32, res: ^[6]f64, flg_local: i32) ---
+	objectAcceleration :: proc(m: ^Model, d: ^Data, objtype: tObj, objid: i32, res: ^[6]f64, flg_local: i32) ---
 
 	// Return smallest signed distance between two geoms and optionally segment from geom1 to geom2.
 	// Nullable: fromto
@@ -605,8 +605,7 @@ foreign mujoco {
 
 	// Intersect ray with pure geom; return nearest distance or -1 if no intersection.
 	// Nullable: normal
-	// BUG
-	mju_rayGeom :: proc(pos: ^[3]f64, mat: ^[9]f64, size: ^[3]f64, pnt: ^[3]f64, vec: ^[3]f64, geomtype: i32, normal: ^[3]f64) -> f64 ---
+	mju_rayGeom :: proc(pos: ^[3]f64, mat: ^[9]f64, size: ^[3]f64, pnt: ^[3]f64, vec: ^[3]f64, geomtype: tGeom, normal: ^[3]f64) -> f64 ---
 
 	// Intersect ray with flex; return nearest distance or -1 if no intersection,
 	// and also output nearest vertex id and surface normal.
@@ -696,14 +695,14 @@ foreign mujoco {
 	mjv_freeScene :: proc(scn: ^vScene) ---
 
 	// Update entire scene given model state.
-	mjv_updateScene :: proc(m: ^Model, d: ^Data, opt: ^vOption, pert: ^vPerturb, cam: ^vCamera, catmask: i32, scn: ^vScene) ---
+	mjv_updateScene :: proc(m: ^Model, d: ^Data, opt: ^vOption, pert: ^vPerturb, cam: ^vCamera, catmask: tCatBit, scn: ^vScene) ---
 
 	// Copy mjModel, skip large arrays not required for abstract visualization.
 	// Nullable: dest
 	mjv_copyModel :: proc(dest: ^Model, src: ^Model) ---
 
 	// Add geoms from selected categories.
-	mjv_addGeoms :: proc(m: ^Model, d: ^Data, opt: ^vOption, pert: ^vPerturb, catmask: i32, scn: ^vScene) ---
+	mjv_addGeoms :: proc(m: ^Model, d: ^Data, opt: ^vOption, pert: ^vPerturb, catmask: tCatBit, scn: ^vScene) ---
 
 	// Make list of lights.
 	mjv_makeLights :: proc(m: ^Model, d: ^Data, scn: ^vScene) ---
@@ -862,7 +861,7 @@ foreign mujoco {
 	mjs_getError :: proc(s: ^Spec) -> cstring ---
 
 	// Return 1 if compiler error is a warning.
-	mjs_isWarning :: proc(s: ^Spec) -> i32 ---
+	mjs_isWarning :: proc(s: ^Spec) -> b32 ---
 
 	// Set res = 0.
 	mju_zero3 :: proc(res: ^[3]f64) ---
@@ -1162,10 +1161,10 @@ foreign mujoco {
 	mju_round :: proc(x: f64) -> i32 ---
 
 	// Convert type id (mjtObj) to type name.
-	mju_type2Str :: proc(type: i32) -> cstring ---
+	mju_type2Str :: proc(type: tObj) -> cstring ---
 
 	// Convert type name to type id (mjtObj).
-	mju_str2Type :: proc(str: cstring) -> i32 ---
+	mju_str2Type :: proc(str: cstring) -> tObj ---
 
 	// Return human readable number of bytes using standard letter suffix.
 	mju_writeNumBytes :: proc(nbytes: c.size_t) -> cstring ---
@@ -1174,10 +1173,10 @@ foreign mujoco {
 	mju_warningText :: proc(warning: i32, info: c.size_t) -> cstring ---
 
 	// Return 1 if nan or abs(x)>mjMAXVAL, 0 otherwise. Used by check functions.
-	mju_isBad :: proc(x: f64) -> i32 ---
+	mju_isBad :: proc(x: f64) -> b32 ---
 
 	// Return 1 if all elements are 0.
-	mju_isZero :: proc(vec: ^f64, n: i32) -> i32 ---
+	mju_isZero :: proc(vec: ^f64, n: i32) -> b32 ---
 
 	// Standard normal random number generator (optional second number).
 	mju_standardNormal :: proc(num2: ^f64) -> f64 ---
