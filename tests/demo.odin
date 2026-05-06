@@ -43,7 +43,7 @@ main :: proc() {
 		}
 
 		// Get the latest scene drawn to the backbuffer
-		mj.mjv_updateScene(m, d, &gfx.opt, nil, &gfx.cam, i32(mj.tCatBit.ALL), &gfx.scn)
+		mj.mjv_updateScene(m, d, &gfx.opt, nil, &gfx.cam, .ALL, &gfx.scn)
 		window_update_and_render(&gfx)
 
 		// NOTE: Insert any custom GUI overlay code here
