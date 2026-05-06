@@ -15,7 +15,7 @@ Search regex: ` ^.*\(.* x .*\)`
 
 5. Delete otherwise-empty files.
 
+6. Change functions taking integers to `enum` types.
+
 ## TODO:
 - What to do with the `mju_` prefix functions?
-- Change functions taking integers to the correct enum types.
-
