@@ -647,10 +647,10 @@ foreign mujoco {
 	mjv_alignToCamera :: proc(res: ^[3]f64, vec: ^[3]f64, forward: ^[3]f64) ---
 
 	// Move camera with mouse; action is mjtMouse.
-	mjv_moveCamera :: proc(m: ^Model, action: i32, reldx: f64, reldy: f64, scn: ^vScene, cam: ^vCamera) ---
+	mjv_moveCamera :: proc(m: ^Model, action: tMouse, reldx: f64, reldy: f64, scn: ^vScene, cam: ^vCamera) ---
 
 	// Move perturb object with mouse; action is mjtMouse.
-	mjv_movePerturb :: proc(m: ^Model, d: ^Data, action: i32, reldx: f64, reldy: f64, scn: ^vScene, pert: ^vPerturb) ---
+	mjv_movePerturb :: proc(m: ^Model, d: ^Data, action: tMouse, reldx: f64, reldy: f64, scn: ^vScene, pert: ^vPerturb) ---
 
 	// Move model with mouse; action is mjtMouse.
 	mjv_moveModel :: proc(m: ^Model, action: i32, reldx: f64, reldy: f64, roomup: ^[3]f64, scn: ^vScene) ---
@@ -755,7 +755,7 @@ foreign mujoco {
 
 	// Set OpenGL framebuffer for rendering: mjFB_WINDOW or mjFB_OFFSCREEN.
 	// If only one buffer is available, set that buffer and ignore framebuffer argument.
-	mjr_setBuffer :: proc(framebuffer: i32, con: ^rContext) ---
+	mjr_setBuffer :: proc(framebuffer: tFramebuffer, con: ^rContext) ---
 
 	// Read pixels from current OpenGL framebuffer to client buffer.
 	// Viewport is in OpenGL framebuffer; client buffer starts at (0,0).
