@@ -75,14 +75,14 @@ tEnableBit :: enum u32 {
 
 EnableBit :: bit_set[tEnableBit;u32]
 
-tJoint :: enum u32 {
+tJoint :: enum i32 {
 	FREE  = 0, // global position and orientation (quat)       (7)
 	BALL  = 1, // orientation (quat) relative to parent        (4)
 	SLIDE = 2, // sliding distance along body-fixed axis       (1)
 	HINGE = 3, // rotation angle (rad) around body-fixed axis  (1)
 } // type of degree of freedom
 
-tGeom :: enum u32 {
+tGeom :: enum i32 {
 	// regular geom types
 	GEOM_PLANE     = 0, // plane
 	GEOM_HFIELD    = 1, // height field
@@ -121,7 +121,7 @@ tCamLight :: enum u32 {
 	TARGETBODYCOM = 4, // pos fixed in body, rot tracks target subtree com
 } // tracking mode for camera and light
 
-tLightType :: enum u32 {
+tLightType :: enum i32 {
 	SPOT        = 0, // spot
 	DIRECTIONAL = 1, // directional
 	POINT       = 2, // point
@@ -154,25 +154,25 @@ tColorSpace :: enum u32 {
 	SRGB   = 2, // standard RGB color space
 } // type of color space encoding
 
-tIntegrator :: enum u32 {
+tIntegrator :: enum i32 {
 	EULER        = 0, // semi-implicit Euler
 	RK4          = 1, // 4th-order Runge Kutta
 	IMPLICIT     = 2, // implicit in velocity
 	IMPLICITFAST = 3, // implicit in velocity, no rne derivative
 } // integrator mode
 
-tCone :: enum u32 {
+tCone :: enum i32 {
 	PYRAMIDAL = 0, // pyramidal
 	ELLIPTIC  = 1, // elliptic
 } // type of friction cone
 
-tJacobian :: enum u32 {
+tJacobian :: enum i32 {
 	DENSE  = 0, // dense
 	SPARSE = 1, // sparse
 	AUTO   = 2, // dense if nv<60, sparse otherwise
 } // type of constraint Jacobian
 
-tSolver :: enum u32 {
+tSolver :: enum i32 {
 	PGS    = 0, // PGS    (dual)
 	CG     = 1, // CG     (primal)
 	NEWTON = 2, // Newton (primal)
@@ -396,7 +396,7 @@ tSameFrame :: enum u32 {
 	INERTIAROT = 4, // frame orientation is same as inertia orientation
 } // frame alignment of bodies with their children
 
-tSleepPolicy :: enum u32 {
+tSleepPolicy :: enum i32 {
 	AUTO         = 0, // compiler chooses sleep policy
 	AUTO_NEVER   = 1, // compiler sleep policy: never
 	AUTO_ALLOWED = 2, // compiler sleep policy: allowed
@@ -405,7 +405,7 @@ tSleepPolicy :: enum u32 {
 	INIT         = 5, // user sleep policy: initialized asleep
 } // per-tree sleep policy
 
-tLRMode :: enum u32 {
+tLRMode :: enum i32 {
 	NONE       = 0, // do not process any actuators
 	MUSCLE     = 1, // process muscle actuators
 	MUSCLEUSER = 2, // process muscle and user actuators
@@ -430,7 +430,7 @@ tSDFType :: enum u32 {
 //---------------------------------- mjLROpt -------------------------------------------------------
 LROpt :: struct {
 	// flags
-	mode:        i32, // which actuators to process (mjtLRMode)
+	mode:        tLRMode, // which actuators to process (mjtLRMode)
 	useexisting: i32, // use existing length range if available
 	uselimit:    i32, // use joint and tendon limits if available
 
@@ -483,10 +483,10 @@ Option :: struct {
 	o_friction:        [5]f64, // friction
 
 	// discrete settings
-	integrator:        i32, // integration mode (mjtIntegrator)
-	cone:              i32, // type of friction cone (mjtCone)
-	jacobian:          i32, // type of Jacobian (mjtJacobian)
-	solver:            i32, // solver algorithm (mjtSolver)
+	integrator:        tIntegrator, // integration mode (mjtIntegrator)
+	cone:              tCone, // type of friction cone (mjtCone)
+	jacobian:          tJacobian, // type of Jacobian (mjtJacobian)
+	solver:            tSolver, // solver algorithm (mjtSolver)
 	iterations:        i32, // maximum number of main solver iterations
 	ls_iterations:     i32, // maximum number of CG/Newton linesearch iterations
 	noslip_iterations: i32, // maximum number of noslip solver iterations
@@ -761,7 +761,7 @@ Model :: struct {
 	oct_coeff:             [^]f64, // octree interpolation coefficients        (noct x 8)
 
 	// joints
-	jnt_type:              [^]i32, // type of joint (mjtJoint)                 (njnt x 1)
+	jnt_type:              [^]tJoint, // type of joint (mjtJoint)                 (njnt x 1)
 	jnt_qposadr:           [^]i32, // start addr in 'qpos' for joint's data    (njnt x 1)
 	jnt_dofadr:            [^]i32, // start addr in 'qvel' for joint's data    (njnt x 1)
 	jnt_bodyid:            [^]i32, // id of joint's body                       (njnt x 1)
@@ -803,10 +803,10 @@ Model :: struct {
 	tree_bodynum:          [^]i32, // number of bodies in tree                 (ntree x 1)
 	tree_dofadr:           [^]i32, // start addr of dofs                       (ntree x 1)
 	tree_dofnum:           [^]i32, // number of dofs in tree                   (ntree x 1)
-	tree_sleep_policy:     [^]i32, // sleep policy (mjtSleepPolicy)            (ntree x 1)
+	tree_sleep_policy:     [^]tSleepPolicy, // sleep policy (mjtSleepPolicy)            (ntree x 1)
 
 	// geoms
-	geom_type:             [^]i32, // geometric type (mjtGeom)                 (ngeom x 1)
+	geom_type:             [^]tGeom, // geometric type (mjtGeom)                 (ngeom x 1)
 	geom_contype:          [^]i32, // geom contact type                        (ngeom x 1)
 	geom_conaffinity:      [^]i32, // geom contact affinity                    (ngeom x 1)
 	geom_condim:           [^]i32, // contact dimensionality (1, 3, 4, 6)      (ngeom x 1)

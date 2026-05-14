@@ -49,7 +49,7 @@ State_User ::
 State_Integration :: State_FullPhysics | State_User | State{.STATE_WARMSTART}
 
 
-tConstraint :: enum u32 {
+tConstraint :: enum i32 {
 	EQUALITY             = 0, // equality constraint
 	FRICTION_DOF         = 1, // dof friction
 	FRICTION_TENDON      = 2, // tendon friction
@@ -60,7 +60,7 @@ tConstraint :: enum u32 {
 	CONTACT_ELLIPTIC     = 7, // frictional contact, elliptic friction cone
 } // type of constraint
 
-tConstraintState :: enum u32 {
+tConstraintState :: enum i32 {
 	SATISFIED = 0, // constraint satisfied, zero cost (limit, contact)
 	QUADRATIC = 1, // quadratic cost (equality, friction, limit, contact)
 	LINEARNEG = 2, // linear cost, negative side (friction)
@@ -326,8 +326,8 @@ Data :: struct {
 	bvh_active:         [^]b8, // was bounding volume checked for collision        (nbvh x 1)
 
 	// computed by mj_updateSleep
-	tree_awake:         [^]i32, // is tree awake; 0: asleep; 1: awake               (ntree x 1)
-	body_awake:         [^]i32, // body sleep state (mjtSleepState)                 (nbody x 1)
+	tree_awake:         [^]tSleepState, // is tree awake; 0: asleep; 1: awake               (ntree x 1)
+	body_awake:         [^]tSleepState, // body sleep state (mjtSleepState)                 (nbody x 1)
 	body_awake_ind:     [^]i32, // indices of awake and static bodies               (nbody x 1)
 	parent_awake_ind:   [^]i32, // indices of bodies with awake or static parents   (nbody x 1)
 	dof_awake_ind:      [^]i32, // indices of awake dofs                            (nv x 1)
@@ -394,7 +394,7 @@ Data :: struct {
 	contact:            [^]Contact, // array of all detected contacts                   (ncon x 1)
 
 	// computed by mj_makeConstraint
-	efc_type:           [^]i32, // constraint type (mjtConstraint)                  (nefc x 1)
+	efc_type:           [^]tConstraint, // constraint type (mjtConstraint)                  (nefc x 1)
 	efc_id:             [^]i32, // id of object of specified type                   (nefc x 1)
 	efc_J_rownnz:       [^]i32, // number of non-zeros in constraint Jacobian row   (nefc x 1)
 	efc_J_rowadr:       [^]i32, // row start address in colind array                (nefc x 1)
@@ -445,7 +445,7 @@ Data :: struct {
 	map_iefc2efc:       [^]i32, // map from iefc to efc                             (nefc x 1)
 
 	// computed by mj_island (constraints sorted by island)
-	iefc_type:          [^]i32, // constraint type (mjtConstraint)                  (nefc x 1)
+	iefc_type:          [^]tConstraint, // constraint type (mjtConstraint)                  (nefc x 1)
 	iefc_id:            [^]i32, // id of object of specified type                   (nefc x 1)
 	iefc_J_rownnz:      [^]i32, // number of non-zeros in constraint Jacobian row   (nefc x 1)
 	iefc_J_rowadr:      [^]i32, // row start address in colind array                (nefc x 1)
@@ -473,9 +473,9 @@ Data :: struct {
 	// computed by mj_fwdConstraint/mj_inverse
 	efc_b:              [^]f64, // linear cost term: J*qacc_smooth - aref           (nefc x 1)
 	iefc_aref:          [^]f64, // reference pseudo-acceleration                    (nefc x 1)
-	iefc_state:         [^]i32, // constraint state (mjtConstraintState)            (nefc x 1)
+	iefc_state:         [^]tConstraintState, // constraint state (mjtConstraintState)            (nefc x 1)
 	iefc_force:         [^]f64, // constraint force in constraint space             (nefc x 1)
-	efc_state:          [^]i32, // constraint state (mjtConstraintState)            (nefc x 1)
+	efc_state:          [^]tConstraintState, // constraint state (mjtConstraintState)            (nefc x 1)
 	efc_force:          [^]f64, // constraint force in constraint space             (nefc x 1)
 	ifrc_constraint:    [^]f64, // constraint force                                 (nidof x 1)
 

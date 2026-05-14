@@ -51,7 +51,7 @@ tCamera :: enum u32 {
 	USER     = 3, // user is responsible for setting OpenGL camera
 } // abstract camera type
 
-tLabel :: enum u32 {
+tLabel :: enum i32 {
 	LABEL_NONE         = 0,  // nothing
 	LABEL_BODY         = 1,  // body labels
 	LABEL_JOINT        = 2,  // joint labels
@@ -72,7 +72,7 @@ tLabel :: enum u32 {
 	NLABEL             = 17, // number of label types
 } // object labeling
 
-tFrame :: enum u32 {
+tFrame :: enum i32 {
 	FRAME_NONE    = 0, // no frames
 	FRAME_BODY    = 1, // body frames
 	FRAME_GEOM    = 2, // geom frames
@@ -134,7 +134,7 @@ tRndFlag :: enum u32 {
 	NRNDFLAG       = 11, // number of rendering flags
 } // flags enabling rendering effects
 
-tStereo :: enum u32 {
+tStereo :: enum i32 {
 	NONE         = 0, // no stereo; use left eye only
 	QUADBUFFERED = 1, // quad buffered; revert to side-by-side if no hardware support
 	SIDEBYSIDE   = 2, // side-by-side
@@ -158,7 +158,7 @@ vPerturb :: struct {
 //---------------------------------- mjvCamera -----------------------------------------------------
 vCamera :: struct {
 	// type and ids
-	type:        i32, // camera type (mjtCamera)
+	type:        tCamera, // camera type (mjtCamera)
 	fixedcamid:  i32, // fixed camera id
 	trackbodyid: i32, // body id to track
 
@@ -169,7 +169,7 @@ vCamera :: struct {
 	elevation: f64,    // camera elevation (deg)
 
 	// orthographic / perspective
-	orthographic: i32, // 0: perspective; 1: orthographic
+	orthographic: tProjection, // 0: perspective; 1: orthographic
 } // abstract camera
 
 //---------------------------------- mjvGLCamera ---------------------------------------------------
@@ -194,7 +194,7 @@ vGLCamera :: struct {
 //---------------------------------- mjvGeom -------------------------------------------------------
 vGeom :: struct {
 	// type info
-	type:     i32, // geom type (mjtGeom)
+	type:     tGeom, // geom type (mjtGeom)
 	dataid:   i32, // mesh, hfield or plane id; -1: none; mesh: 2*id or 2*id+1 (hull)
 	objtype:  i32, // mujoco object type; mjOBJ_UNKNOWN for decor
 	objid:    i32, // mujoco object id; -1 for decor
@@ -227,7 +227,7 @@ vLight :: struct {
 	id:          i32,    // light id, -1 for headlight
 	pos:         [3]f32, // position rel. to body frame
 	dir:         [3]f32, // direction rel. to body frame
-	type:        i32,    // type (mjtLightType)
+	type:        tLightType,    // type (mjtLightType)
 	texid:       i32,    // texture id for image lights
 	attenuation: [3]f32, // OpenGL attenuation (quadratic model)
 	cutoff:      f32,    // OpenGL cutoff
@@ -244,8 +244,8 @@ vLight :: struct {
 
 //---------------------------------- mjvOption -----------------------------------------------------
 vOption :: struct {
-	label:         i32,    // what objects to label (mjtLabel)
-	frame:         i32,    // which frame to show (mjtFrame)
+	label:         tLabel,    // what objects to label (mjtLabel)
+	frame:         tFrame,    // which frame to show (mjtFrame)
 	geomgroup:     [6]b8,  // geom visualization by group
 	sitegroup:     [6]b8,  // site visualization by group
 	jointgroup:    [6]b8,  // joint visualization by group
@@ -307,7 +307,7 @@ vScene :: struct {
 	scale:           f32,    // model scaling
 
 	// OpenGL rendering effects
-	stereo: i32,    // stereoscopic rendering (mjtStereo)
+	stereo: tStereo,    // stereoscopic rendering (mjtStereo)
 	flags:  [11]b8, // rendering flags (indexed by mjtRndFlag)
 
 	// framing
