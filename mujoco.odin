@@ -19,7 +19,7 @@ import "core:c"
 mjVERSION_HEADER :: 3008000
 
 when ODIN_OS == .Windows {
-	foreign import mujoco "mujoco.dll"
+	foreign import mujoco "mujoco.lib"
 } else when ODIN_OS == .Darwin {
 	foreign import mujoco "libmujoco.3.8.0.dylib"
 } else {
