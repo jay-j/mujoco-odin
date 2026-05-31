@@ -253,7 +253,7 @@ vOption :: struct {
 	actuatorgroup: [6]b8,  // actuator visualization by group
 	flexgroup:     [6]b8,  // flex visualization by group
 	skingroup:     [6]b8,  // skin visualization by group
-	flags:         [31]b8, // visualization flags (indexed by mjtVisFlag)
+	flags:         [tVisFlag]b8, // visualization flags (indexed by mjtVisFlag. was [31]b8)
 	bvh_depth:     i32,    // depth of the bounding volume hierarchy to be visualized
 	flex_layer:    i32,    // element layer to be visualized for 3D flex
 } // abstract visualization options
@@ -308,7 +308,7 @@ vScene :: struct {
 
 	// OpenGL rendering effects
 	stereo: tStereo,    // stereoscopic rendering (mjtStereo)
-	flags:  [11]b8, // rendering flags (indexed by mjtRndFlag)
+	flags:  [tRndFlag]b8, // rendering flags (indexed by mjtRndFlag)
 
 	// framing
 	framewidth: i32,    // frame pixel width; 0: disable framing
